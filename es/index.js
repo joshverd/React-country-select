@@ -40,6 +40,9 @@ var ReactCountrySelect = function (_Component) {
 
     ReactCountrySelect.prototype.CountryOptionRenderer = function CountryOptionRenderer(option) {
         var flagImageUrl = this.props.flagImagePath + option.value + '.png';
+
+        if (this.props.flagImageURLFormatter) flagImageUrl = this.props.flagImageURLFormatter(option.value);
+
         var optionStyle = {
             width: 50,
             height: 30
@@ -56,18 +59,19 @@ var ReactCountrySelect = function (_Component) {
     };
 
     ReactCountrySelect.prototype.CountryRenderValue = function CountryRenderValue(option) {
+        if (option.value === undefined) return null;
+
         var flagImageUrl = this.props.flagImagePath + option.value + '.png';
-        if (option.value === undefined) {
-            return null;
-        } else {
-            return React.createElement(
-                'span',
-                null,
-                React.createElement('img', { src: flagImageUrl, style: this.state.imageStyle, alt: '', onError: this.onImageError }),
-                '\xA0 ',
-                option.label
-            );
-        }
+
+        if (this.props.flagImageURLFormatter) flagImageUrl = this.props.flagImageURLFormatter(option.value);
+
+        return React.createElement(
+            'span',
+            null,
+            React.createElement('img', { src: flagImageUrl, style: this.state.imageStyle, alt: '', onError: this.onImageError }),
+            '\xA0 ',
+            option.label
+        );
     };
 
     ReactCountrySelect.prototype.render = function render() {

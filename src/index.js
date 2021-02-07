@@ -28,7 +28,10 @@ export default class ReactCountrySelect extends Component {
     }
 
     CountryOptionRenderer(option) {
-        const flagImageUrl = this.props.flagImagePath + option.value + '.png';
+        let flagImageUrl = this.props.flagImagePath + option.value + '.png';
+
+        if(this.props.flagImageURLFormatter) flagImageUrl = this.props.flagImageURLFormatter(option.value);
+
         const optionStyle = {
             width: 50,
             height: 30
@@ -43,16 +46,17 @@ export default class ReactCountrySelect extends Component {
     }
 
     CountryRenderValue(option) {
-        const flagImageUrl = this.props.flagImagePath + option.value + '.png';
-        if (option.value === undefined) {
-            return null;
-        } else {
-            return (
-                <span>
-                    <img src={flagImageUrl} style={this.state.imageStyle} alt="" onError={this.onImageError}/>&nbsp; {option.label}
-                </span>
-            )
-        }
+        if(option.value === undefined) return null;
+
+        let flagImageUrl = this.props.flagImagePath + option.value + '.png';
+
+        if(this.props.flagImageURLFormatter) flagImageUrl = this.props.flagImageURLFormatter(option.value);
+            
+        return (
+            <span>
+                <img src={flagImageUrl} style={this.state.imageStyle} alt="" onError={this.onImageError}/>&nbsp; {option.label}
+            </span>
+        )
     }
 
     render() {
